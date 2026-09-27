@@ -1,0 +1,6 @@
+{
+  "name": "Khata Book",
+  "description": "Simple and professional Customer Udhar-Jama Khata Book app for small businesses in India with Gujarati, Hindi, and English support.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
