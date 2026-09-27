@@ -440,7 +440,7 @@ fun CustomerKhataScreen(
         Dialog(onDismissRequest = { showReminderPreviewDialog = false }) {
             Card(
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
@@ -450,7 +450,7 @@ fun CustomerKhataScreen(
                     Text(
                         text = "વોટ્સએપ તગાદો / રીમાઇન્ડર",
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = KhataTextPrimary
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     OutlinedTextField(
@@ -459,7 +459,23 @@ fun CustomerKhataScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .heightIn(min = 140.dp, max = 220.dp),
-                        label = { Text("સંદેશો (સંપાદિત કરી શકો છો)") },
+                        label = {
+                            Text(
+                                "સંદેશો (સંપાદિત કરી શકો છો)",
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        },
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        ),
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+                        ),
                         shape = RoundedCornerShape(10.dp)
                     )
 
@@ -501,7 +517,7 @@ fun TransactionHistoryCard(
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp)
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
@@ -553,7 +569,7 @@ fun TransactionHistoryCard(
                         Text(
                             text = transaction.description,
                             style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                            color = KhataTextPrimary
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
 
@@ -604,10 +620,27 @@ fun TransactionEntryDialog(
 
     val paymentOptions = listOf("Cash", "UPI", "Bank", "Other")
 
+    val inputColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+        focusedBorderColor = MaterialTheme.colorScheme.primary,
+        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+        cursorColor = MaterialTheme.colorScheme.primary,
+        focusedContainerColor = MaterialTheme.colorScheme.surface,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+    )
+    val inputTextStyle = MaterialTheme.typography.bodyLarge.copy(
+        color = MaterialTheme.colorScheme.onSurface,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    )
+
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -628,12 +661,20 @@ fun TransactionEntryDialog(
                         amountStr = it
                         if (it.isNotBlank()) error = false
                     },
-                    label = { Text(KhataStrings.get("amount", language)) },
+                    label = {
+                        Text(
+                            KhataStrings.get("amount", language),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     isError = error,
                     supportingText = {
-                        if (error) Text("યોગ્ય રકમ દાખલ કરો", color = UdharRed)
+                        if (error) Text("યોગ્ય રકમ દાખલ કરો", color = UdharRed, fontWeight = FontWeight.Bold)
                     },
+                    textStyle = inputTextStyle,
+                    colors = inputColors,
                     modifier = Modifier.fillMaxWidth().testTag("input_tx_amount"),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp)
@@ -662,9 +703,13 @@ fun TransactionEntryDialog(
                     label = {
                         Text(
                             if (isUdhar) KhataStrings.get("item_details", language)
-                            else "વિગત (જેમ કે હપ્તો, હિસાબ, પેમેન્ટ)"
+                            else "વિગત (જેમ કે હપ્તો, હિસાબ, પેમેન્ટ)",
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     },
+                    textStyle = inputTextStyle,
+                    colors = inputColors,
                     modifier = Modifier.fillMaxWidth().testTag("input_tx_desc"),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp)
@@ -675,8 +720,8 @@ fun TransactionEntryDialog(
                     Column {
                         Text(
                             text = KhataStrings.get("payment_mode", language),
-                            style = MaterialTheme.typography.labelMedium,
-                            color = KhataTextSecondary
+                            style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                         Spacer(modifier = Modifier.height(4.dp))
                         Row(
@@ -687,7 +732,7 @@ fun TransactionEntryDialog(
                                 FilterChip(
                                     selected = paymentMode == mode,
                                     onClick = { paymentMode = mode },
-                                    label = { Text(mode) },
+                                    label = { Text(mode, fontWeight = FontWeight.SemiBold) },
                                     modifier = Modifier.weight(1f)
                                 )
                             }
@@ -698,7 +743,15 @@ fun TransactionEntryDialog(
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text(KhataStrings.get("notes", language)) },
+                    label = {
+                        Text(
+                            KhataStrings.get("notes", language),
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    },
+                    textStyle = inputTextStyle,
+                    colors = inputColors,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp)
@@ -748,10 +801,27 @@ fun EditTransactionDialog(
     var notes by remember { mutableStateOf(transaction.notes) }
     val isUdhar = transaction.type.equals("UDHAR", true)
 
+    val editInputColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+        focusedBorderColor = MaterialTheme.colorScheme.primary,
+        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+        cursorColor = MaterialTheme.colorScheme.primary,
+        focusedContainerColor = MaterialTheme.colorScheme.surface,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+    )
+    val editInputTextStyle = MaterialTheme.typography.bodyLarge.copy(
+        color = MaterialTheme.colorScheme.onSurface,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    )
+
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
@@ -763,14 +833,16 @@ fun EditTransactionDialog(
                 Text(
                     text = "વ્યવહારમાં ફેરફાર કરો (${if (isUdhar) "ઉધાર" else "જમા"})",
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    color = KhataTextPrimary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 OutlinedTextField(
                     value = amountStr,
                     onValueChange = { amountStr = it },
-                    label = { Text("રકમ (₹)") },
+                    label = { Text("રકમ (₹)", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                    textStyle = editInputTextStyle,
+                    colors = editInputColors,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -778,7 +850,9 @@ fun EditTransactionDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("વિગત / વસ્તુ") },
+                    label = { Text("વિગત / વસ્તુ", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    textStyle = editInputTextStyle,
+                    colors = editInputColors,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )
@@ -787,7 +861,9 @@ fun EditTransactionDialog(
                     OutlinedTextField(
                         value = paymentMode,
                         onValueChange = { paymentMode = it },
-                        label = { Text("ચુકવણી પ્રકાર (Cash / UPI / Bank)") },
+                        label = { Text("ચુકવણી પ્રકાર (Cash / UPI / Bank)", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                        textStyle = editInputTextStyle,
+                        colors = editInputColors,
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true
                     )
@@ -796,7 +872,9 @@ fun EditTransactionDialog(
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text("નોંધ") },
+                    label = { Text("નોંધ", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    textStyle = editInputTextStyle,
+                    colors = editInputColors,
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true
                 )

@@ -43,8 +43,8 @@ private val LightColorScheme = lightColorScheme(
     onBackground = KhataTextPrimary,
     onSurface = KhataTextPrimary,
     surfaceVariant = Color(0xFFF1F5F9),
-    onSurfaceVariant = KhataTextSecondary,
-    outline = KhataCardBorder
+    onSurfaceVariant = Color(0xFF334155),
+    outline = Color(0xFF64748B)
 )
 
 @Composable
@@ -91,8 +91,8 @@ fun MyApplicationTheme(
             onBackground = KhataTextPrimary,
             onSurface = KhataTextPrimary,
             surfaceVariant = Color(0xFFF1F5F9),
-            onSurfaceVariant = KhataTextSecondary,
-            outline = KhataCardBorder
+            onSurfaceVariant = Color(0xFF334155),
+            outline = Color(0xFF64748B)
         )
     }
 

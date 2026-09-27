@@ -1,5 +1,6 @@
 package com.example.ui.screens
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -24,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.KhataViewModel
@@ -146,10 +148,12 @@ fun CustomersScreen(
                 singleLine = true,
                 shape = RoundedCornerShape(12.dp),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.White,
+                    focusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+                    focusedContainerColor = MaterialTheme.colorScheme.surface,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = KhataCardBorder
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outline
                 )
             )
 
@@ -286,7 +290,7 @@ fun CustomerListItem(
             .clickable { onClick() }
             .testTag("customer_item_${customer.id}"),
         shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -320,7 +324,7 @@ fun CustomerListItem(
                     Text(
                         text = customer.name,
                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = KhataTextPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -419,15 +423,35 @@ fun AddEditCustomerDialog(
     }
     var nameError by remember { mutableStateOf(false) }
 
+    val inputColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+        focusedBorderColor = MaterialTheme.colorScheme.primary,
+        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+        cursorColor = MaterialTheme.colorScheme.primary,
+        focusedContainerColor = MaterialTheme.colorScheme.surface,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+    )
+
+    val inputTextStyle = MaterialTheme.typography.bodyLarge.copy(
+        color = MaterialTheme.colorScheme.onSurface,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    )
+
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
             Column(
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(22.dp)
                     .fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
@@ -435,7 +459,7 @@ fun AddEditCustomerDialog(
                     text = if (customerToEdit == null) KhataStrings.get("btn_add_customer", language)
                     else KhataStrings.get("btn_edit", language),
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-                    color = KhataTextPrimary
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
                 OutlinedTextField(
@@ -444,11 +468,21 @@ fun AddEditCustomerDialog(
                         name = it
                         if (it.isNotBlank()) nameError = false
                     },
-                    label = { Text(KhataStrings.get("customer_name", language)) },
+                    label = {
+                        Text(
+                            KhataStrings.get("customer_name", language),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                    },
                     isError = nameError,
                     supportingText = {
-                        if (nameError) Text("નામ દાખલ કરવું જરૂરી છે", color = UdharRed)
+                        if (nameError) Text("નામ દાખલ કરવું જરૂરી છે", color = UdharRed, fontWeight = FontWeight.Bold)
                     },
+                    textStyle = inputTextStyle,
+                    colors = inputColors,
                     modifier = Modifier.fillMaxWidth().testTag("input_customer_name"),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp)
@@ -457,8 +491,18 @@ fun AddEditCustomerDialog(
                 OutlinedTextField(
                     value = mobile,
                     onValueChange = { mobile = it },
-                    label = { Text(KhataStrings.get("mobile_number", language)) },
+                    label = {
+                        Text(
+                            KhataStrings.get("mobile_number", language),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    textStyle = inputTextStyle,
+                    colors = inputColors,
                     modifier = Modifier.fillMaxWidth().testTag("input_customer_mobile"),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp)
@@ -467,7 +511,17 @@ fun AddEditCustomerDialog(
                 OutlinedTextField(
                     value = address,
                     onValueChange = { address = it },
-                    label = { Text(KhataStrings.get("address", language)) },
+                    label = {
+                        Text(
+                            KhataStrings.get("address", language),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                    },
+                    textStyle = inputTextStyle,
+                    colors = inputColors,
                     modifier = Modifier.fillMaxWidth().testTag("input_customer_address"),
                     singleLine = true,
                     shape = RoundedCornerShape(10.dp)
@@ -477,8 +531,18 @@ fun AddEditCustomerDialog(
                     OutlinedTextField(
                         value = openingBalanceStr,
                         onValueChange = { openingBalanceStr = it },
-                        label = { Text(KhataStrings.get("opening_balance", language)) },
+                        label = {
+                            Text(
+                                KhataStrings.get("opening_balance", language),
+                                style = MaterialTheme.typography.bodyMedium.copy(
+                                    fontWeight = FontWeight.Bold,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            )
+                        },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                        textStyle = inputTextStyle,
+                        colors = inputColors,
                         modifier = Modifier.fillMaxWidth().testTag("input_customer_opening_balance"),
                         singleLine = true,
                         shape = RoundedCornerShape(10.dp)
@@ -488,7 +552,17 @@ fun AddEditCustomerDialog(
                 OutlinedTextField(
                     value = notes,
                     onValueChange = { notes = it },
-                    label = { Text(KhataStrings.get("notes", language)) },
+                    label = {
+                        Text(
+                            KhataStrings.get("notes", language),
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        )
+                    },
+                    textStyle = inputTextStyle,
+                    colors = inputColors,
                     modifier = Modifier.fillMaxWidth().testTag("input_customer_notes"),
                     singleLine = false,
                     maxLines = 2,
@@ -501,7 +575,11 @@ fun AddEditCustomerDialog(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     TextButton(onClick = onDismiss) {
-                        Text(KhataStrings.get("btn_cancel", language))
+                        Text(
+                            KhataStrings.get("btn_cancel", language),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     Button(
@@ -516,7 +594,7 @@ fun AddEditCustomerDialog(
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                         modifier = Modifier.testTag("btn_save_customer")
                     ) {
-                        Text(KhataStrings.get("btn_save", language), color = Color.White)
+                        Text(KhataStrings.get("btn_save", language), color = Color.White, fontWeight = FontWeight.Bold)
                     }
                 }
             }

@@ -444,10 +444,28 @@ fun BusinessProfileEditDialog(
     var gstNumber by remember { mutableStateOf(profile?.gstNumber ?: "") }
     var upiId by remember { mutableStateOf(profile?.upiId ?: "") }
 
+    val profileInputColors = OutlinedTextFieldDefaults.colors(
+        focusedTextColor = MaterialTheme.colorScheme.onSurface,
+        unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.onSurface,
+        focusedBorderColor = MaterialTheme.colorScheme.primary,
+        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+        cursorColor = MaterialTheme.colorScheme.primary,
+        focusedContainerColor = MaterialTheme.colorScheme.surface,
+        unfocusedContainerColor = MaterialTheme.colorScheme.surface
+    )
+    val profileInputTextStyle = MaterialTheme.typography.bodyLarge.copy(
+        color = MaterialTheme.colorScheme.onSurface,
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    )
+
     Dialog(onDismissRequest = onDismiss) {
         Card(
             shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             modifier = Modifier
                 .fillMaxWidth()
@@ -486,7 +504,7 @@ fun BusinessProfileEditDialog(
                         Text(
                             text = KhataStrings.get("owner_profile_title", language),
                             style = MaterialTheme.typography.bodySmall,
-                            color = KhataTextSecondary
+                            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
                         )
                     }
                 }
@@ -496,7 +514,9 @@ fun BusinessProfileEditDialog(
                 OutlinedTextField(
                     value = businessName,
                     onValueChange = { businessName = it },
-                    label = { Text(KhataStrings.get("business_name", language)) },
+                    label = { Text(KhataStrings.get("business_name", language), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    textStyle = profileInputTextStyle,
+                    colors = profileInputColors,
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth().testTag("business_name_input")
                 )
@@ -504,7 +524,9 @@ fun BusinessProfileEditDialog(
                 OutlinedTextField(
                     value = ownerName,
                     onValueChange = { ownerName = it },
-                    label = { Text(KhataStrings.get("owner_name", language)) },
+                    label = { Text(KhataStrings.get("owner_name", language), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    textStyle = profileInputTextStyle,
+                    colors = profileInputColors,
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth().testTag("owner_name_input")
                 )
@@ -512,8 +534,10 @@ fun BusinessProfileEditDialog(
                 OutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
-                    label = { Text(KhataStrings.get("phone_number", language)) },
+                    label = { Text(KhataStrings.get("phone_number", language), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    textStyle = profileInputTextStyle,
+                    colors = profileInputColors,
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth().testTag("owner_phone_input")
                 )
@@ -521,7 +545,9 @@ fun BusinessProfileEditDialog(
                 OutlinedTextField(
                     value = upiId,
                     onValueChange = { upiId = it },
-                    label = { Text(KhataStrings.get("upi_id_label", language)) },
+                    label = { Text(KhataStrings.get("upi_id_label", language), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    textStyle = profileInputTextStyle,
+                    colors = profileInputColors,
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth().testTag("owner_upi_input")
                 )
@@ -529,7 +555,9 @@ fun BusinessProfileEditDialog(
                 OutlinedTextField(
                     value = address,
                     onValueChange = { address = it },
-                    label = { Text(KhataStrings.get("profile_address", language)) },
+                    label = { Text(KhataStrings.get("profile_address", language), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    textStyle = profileInputTextStyle,
+                    colors = profileInputColors,
                     maxLines = 2,
                     modifier = Modifier.fillMaxWidth().testTag("owner_address_input")
                 )
@@ -537,7 +565,9 @@ fun BusinessProfileEditDialog(
                 OutlinedTextField(
                     value = gstNumber,
                     onValueChange = { gstNumber = it },
-                    label = { Text(KhataStrings.get("gst_number_label", language)) },
+                    label = { Text(KhataStrings.get("gst_number_label", language), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface) },
+                    textStyle = profileInputTextStyle,
+                    colors = profileInputColors,
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth().testTag("owner_gst_input")
                 )
