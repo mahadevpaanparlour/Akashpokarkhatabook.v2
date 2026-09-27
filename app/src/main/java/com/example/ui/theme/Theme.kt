@@ -50,24 +50,57 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun MyApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = false, // Keep consistent merchant green theme
+    themeColorName: String = "EMERALD",
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    val (primaryColor, primaryDark, primaryLight) = when (themeColorName.uppercase()) {
+        "NAVY" -> Triple(KhataNavyPrimary, KhataNavyDark, KhataNavyLight)
+        "MAROON" -> Triple(KhataMaroonPrimary, KhataMaroonDark, KhataMaroonLight)
+        "PURPLE" -> Triple(KhataPurplePrimary, KhataPurpleDark, KhataPurpleLight)
+        else -> Triple(KhataGreenPrimary, KhataGreenDark, KhataGreenLight)
+    }
+
+    val colorScheme = if (darkTheme) {
+        darkColorScheme(
+            primary = primaryLight,
+            secondary = KhataAmberLight,
+            tertiary = AdvanceBlue,
+            background = Color(0xFF0F172A),
+            surface = Color(0xFF1E293B),
+            onPrimary = primaryDark,
+            onSecondary = Color.Black,
+            onBackground = Color(0xFFF8FAFC),
+            onSurface = Color(0xFFF8FAFC),
+            surfaceVariant = Color(0xFF334155),
+            onSurfaceVariant = Color(0xFFCBD5E1),
+            outline = Color(0xFF475569)
+        )
+    } else {
+        lightColorScheme(
+            primary = primaryColor,
+            onPrimary = Color.White,
+            primaryContainer = primaryLight,
+            onPrimaryContainer = primaryDark,
+            secondary = KhataAmber,
+            onSecondary = Color.White,
+            secondaryContainer = KhataAmberLight,
+            onSecondaryContainer = Color(0xFF78350F),
+            tertiary = AdvanceBlue,
+            background = KhataBg,
+            surface = KhataCardSurface,
+            onBackground = KhataTextPrimary,
+            onSurface = KhataTextPrimary,
+            surfaceVariant = Color(0xFFF1F5F9),
+            onSurfaceVariant = KhataTextSecondary,
+            outline = KhataCardBorder
+        )
     }
 
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
+            window.statusBarColor = primaryColor.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }

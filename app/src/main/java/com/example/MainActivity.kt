@@ -43,8 +43,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            MyApplicationTheme {
-                KhataApp()
+            val viewModel: KhataViewModel = viewModel()
+            val appSettings by viewModel.appSettings.collectAsStateWithLifecycle()
+            val isDark = when (appSettings?.themeMode) {
+                "DARK" -> true
+                "LIGHT" -> false
+                else -> androidx.compose.foundation.isSystemInDarkTheme()
+            }
+            val themeColor = appSettings?.themeColor ?: "EMERALD"
+
+            MyApplicationTheme(
+                darkTheme = isDark,
+                themeColorName = themeColor
+            ) {
+                KhataApp(viewModel = viewModel)
             }
         }
     }

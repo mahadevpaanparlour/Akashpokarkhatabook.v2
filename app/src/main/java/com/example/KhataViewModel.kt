@@ -235,6 +235,20 @@ class KhataViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun setThemeMode(mode: String) {
+        viewModelScope.launch {
+            val current = appSettings.value ?: AppSettingsEntity()
+            repository.updateAppSettings(current.copy(themeMode = mode))
+        }
+    }
+
+    fun setThemeColor(colorName: String) {
+        viewModelScope.launch {
+            val current = appSettings.value ?: AppSettingsEntity()
+            repository.updateAppSettings(current.copy(themeColor = colorName))
+        }
+    }
+
     fun setPin(pin: String, enabled: Boolean) {
         viewModelScope.launch {
             val current = appSettings.value ?: AppSettingsEntity()

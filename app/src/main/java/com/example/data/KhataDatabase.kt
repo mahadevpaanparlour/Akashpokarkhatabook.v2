@@ -12,7 +12,7 @@ import androidx.room.RoomDatabase
         BusinessProfileEntity::class,
         AppSettingsEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class KhataDatabase : RoomDatabase() {

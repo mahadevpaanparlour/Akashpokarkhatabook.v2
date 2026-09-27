@@ -69,5 +69,7 @@ data class AppSettingsEntity(
     val id: Int = 1,
     val language: String = "gu", // "gu", "hi", "en"
     val isPinEnabled: Boolean = false,
-    val pinCode: String = ""
+    val pinCode: String = "",
+    val themeMode: String = "LIGHT", // "LIGHT", "DARK", "SYSTEM"
+    val themeColor: String = "EMERALD" // "EMERALD", "NAVY", "MAROON", "PURPLE"
 )

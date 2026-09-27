@@ -29,6 +29,7 @@ import com.example.data.CustomerEntity
 import com.example.localization.AppLanguage
 import com.example.localization.KhataStrings
 import com.example.ui.components.BalanceStatusChip
+import com.example.ui.components.BusinessProfileEditDialog
 import com.example.ui.components.KhataShareHelper
 import com.example.ui.components.StatCard
 import com.example.ui.components.formatInr
@@ -58,24 +59,43 @@ fun HomeScreen(
         transactions.take(5)
     }
 
+    var showEditProfileDialog by remember { mutableStateOf(false) }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
-                    Column {
-                        Text(
-                            text = profile?.businessName ?: KhataStrings.get("app_title", language),
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            text = profile?.ownerName ?: "ડિજિટલ ખાતાવહી",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = KhataTextSecondary,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .clickable { showEditProfileDialog = true }
+                            .padding(vertical = 4.dp, horizontal = 2.dp)
+                    ) {
+                        Column(modifier = Modifier.weight(1f, fill = false)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = profile?.businessName ?: KhataStrings.get("app_title", language),
+                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Spacer(modifier = Modifier.width(4.dp))
+                                Icon(
+                                    Icons.Default.Edit,
+                                    contentDescription = "Edit Profile",
+                                    tint = KhataTextSecondary,
+                                    modifier = Modifier.size(14.dp)
+                                )
+                            }
+                            Text(
+                                text = profile?.ownerName ?: "ડિજિટલ ખાતાવહી",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = KhataTextSecondary,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     }
                 },
                 actions = {
@@ -388,6 +408,18 @@ fun HomeScreen(
                 }
             }
         }
+    }
+
+    if (showEditProfileDialog) {
+        BusinessProfileEditDialog(
+            profile = profile,
+            language = language,
+            onDismiss = { showEditProfileDialog = false },
+            onSave = { updated ->
+                viewModel.updateBusinessProfile(updated)
+                showEditProfileDialog = false
+            }
+        )
     }
 }
 

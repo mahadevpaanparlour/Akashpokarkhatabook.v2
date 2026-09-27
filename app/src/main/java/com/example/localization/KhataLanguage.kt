@@ -349,6 +349,101 @@ object KhataStrings {
             AppLanguage.GUJARATI to "બધો ડેટા સાફ કરો (Reset)",
             AppLanguage.HINDI to "सभी डेटा हटाएं (Reset)",
             AppLanguage.ENGLISH to "Clear All Data"
+        ),
+        "app_theme" to mapOf(
+            AppLanguage.GUJARATI to "એપ થીમ અને કલર (Theme & Appearance)",
+            AppLanguage.HINDI to "ऐप थीम और रंग (Theme & Appearance)",
+            AppLanguage.ENGLISH to "Theme & Appearance"
+        ),
+        "theme_mode" to mapOf(
+            AppLanguage.GUJARATI to "લાઇટ / ડાર્ક મોડ",
+            AppLanguage.HINDI to "लाइट / डार्क मोड",
+            AppLanguage.ENGLISH to "Theme Mode"
+        ),
+        "theme_light" to mapOf(
+            AppLanguage.GUJARATI to "લાઇટ (દિવસ)",
+            AppLanguage.HINDI to "लाइट (Light)",
+            AppLanguage.ENGLISH to "Light"
+        ),
+        "theme_dark" to mapOf(
+            AppLanguage.GUJARATI to "ડાર્ક (રાત્રિ)",
+            AppLanguage.HINDI to "डार्क (Dark)",
+            AppLanguage.ENGLISH to "Dark"
+        ),
+        "theme_system" to mapOf(
+            AppLanguage.GUJARATI to "સિસ્ટમ (ઓટો)",
+            AppLanguage.HINDI to "सिस्टम (Auto)",
+            AppLanguage.ENGLISH to "System"
+        ),
+        "theme_color" to mapOf(
+            AppLanguage.GUJARATI to "રંગ થીમ (Accent Color)",
+            AppLanguage.HINDI to "थीम का रंग (Color)",
+            AppLanguage.ENGLISH to "Accent Color"
+        ),
+        "owner_profile_title" to mapOf(
+            AppLanguage.GUJARATI to "દુકાન માલિક / ઓનર પ્રોફાઇલ",
+            AppLanguage.HINDI to "दुकानदार / ओनर प्रोफ़ाइल",
+            AppLanguage.ENGLISH to "Shop Owner Profile"
+        ),
+        "edit_owner_profile" to mapOf(
+            AppLanguage.GUJARATI to "ઓનર / દુકાન પ્રોફાઇલ સંપાદિત કરો",
+            AppLanguage.HINDI to "ओनर / बिज़नेस प्रोफ़ाइल एडिट करें",
+            AppLanguage.ENGLISH to "Edit Owner / Business Profile"
+        ),
+        "business_name" to mapOf(
+            AppLanguage.GUJARATI to "દુકાન / પેઢીનું નામ",
+            AppLanguage.HINDI to "दुकान / फ़र्म का नाम",
+            AppLanguage.ENGLISH to "Shop / Business Name"
+        ),
+        "owner_name" to mapOf(
+            AppLanguage.GUJARATI to "માલિકનું નામ",
+            AppLanguage.HINDI to "मालिक का नाम",
+            AppLanguage.ENGLISH to "Owner Name"
+        ),
+        "phone_number" to mapOf(
+            AppLanguage.GUJARATI to "મોબાઈલ નંબર / WhatsApp",
+            AppLanguage.HINDI to "मोबाइल नंबर / WhatsApp",
+            AppLanguage.ENGLISH to "Mobile / WhatsApp"
+        ),
+        "upi_id_label" to mapOf(
+            AppLanguage.GUJARATI to "તગાદા માટે UPI ID (GooglePay / PhonePe)",
+            AppLanguage.HINDI to "भुगतान हेतु UPI ID (GPay / PhonePe)",
+            AppLanguage.ENGLISH to "UPI ID for Payments (GPay/PhonePe)"
+        ),
+        "profile_address" to mapOf(
+            AppLanguage.GUJARATI to "દુકાનનું સરનામું",
+            AppLanguage.HINDI to "दुकान का पता (Address)",
+            AppLanguage.ENGLISH to "Shop Address"
+        ),
+        "gst_number_label" to mapOf(
+            AppLanguage.GUJARATI to "GST નંબર (મરજિયાત)",
+            AppLanguage.HINDI to "GSTIN नंबर (वैकल्पिक)",
+            AppLanguage.ENGLISH to "GSTIN Number (Optional)"
+        ),
+        "profile_saved_toast" to mapOf(
+            AppLanguage.GUJARATI to "પ્રોફાઇલ સાચવવામાં આવી!",
+            AppLanguage.HINDI to "प्रोफ़ाइल सफलतापूर्वक सेव हो गई!",
+            AppLanguage.ENGLISH to "Profile saved successfully!"
+        ),
+        "theme_color_emerald" to mapOf(
+            AppLanguage.GUJARATI to "મર્ચન્ટ લીલો (Green)",
+            AppLanguage.HINDI to "व्यापारी हरा (Emerald Green)",
+            AppLanguage.ENGLISH to "Merchant Emerald"
+        ),
+        "theme_color_navy" to mapOf(
+            AppLanguage.GUJARATI to "રોયલ નેવી (Navy Blue)",
+            AppLanguage.HINDI to "रॉयल नेवी (Navy Blue)",
+            AppLanguage.ENGLISH to "Royal Navy"
+        ),
+        "theme_color_maroon" to mapOf(
+            AppLanguage.GUJARATI to "બહી-ખાતા લાલ (Maroon Red)",
+            AppLanguage.HINDI to "बही-खाता लाल (Maroon Red)",
+            AppLanguage.ENGLISH to "Khata Maroon"
+        ),
+        "theme_color_purple" to mapOf(
+            AppLanguage.GUJARATI to "મોડર્ન પર્પલ (Purple)",
+            AppLanguage.HINDI to "मॉडर्न पर्पल (Purple)",
+            AppLanguage.ENGLISH to "Modern Purple"
         )
     )
 }

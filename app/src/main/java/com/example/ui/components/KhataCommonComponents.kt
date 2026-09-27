@@ -12,28 +12,35 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.Remove
+import androidx.compose.material.icons.filled.Storefront
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import com.example.data.BusinessProfileEntity
 import com.example.data.CustomerEntity
 import com.example.data.TransactionEntity
@@ -418,3 +425,156 @@ ${business?.phone ?: ""}
         }
     }
 }
+
+/**
+ * Reusable dialog for editing Shop / Merchant / App Owner details
+ */
+@Composable
+fun BusinessProfileEditDialog(
+    profile: BusinessProfileEntity?,
+    language: AppLanguage,
+    onDismiss: () -> Unit,
+    onSave: (BusinessProfileEntity) -> Unit
+) {
+    val context = LocalContext.current
+    var businessName by remember { mutableStateOf(profile?.businessName ?: "") }
+    var ownerName by remember { mutableStateOf(profile?.ownerName ?: "") }
+    var phone by remember { mutableStateOf(profile?.phone ?: "") }
+    var address by remember { mutableStateOf(profile?.address ?: "") }
+    var gstNumber by remember { mutableStateOf(profile?.gstNumber ?: "") }
+    var upiId by remember { mutableStateOf(profile?.upiId ?: "") }
+
+    Dialog(onDismissRequest = onDismiss) {
+        Card(
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(20.dp)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primaryContainer),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            Icons.Default.Storefront,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(22.dp)
+                        )
+                    }
+                    Column {
+                        Text(
+                            text = KhataStrings.get("edit_owner_profile", language),
+                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = KhataStrings.get("owner_profile_title", language),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = KhataTextSecondary
+                        )
+                    }
+                }
+
+                HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
+
+                OutlinedTextField(
+                    value = businessName,
+                    onValueChange = { businessName = it },
+                    label = { Text(KhataStrings.get("business_name", language)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().testTag("business_name_input")
+                )
+
+                OutlinedTextField(
+                    value = ownerName,
+                    onValueChange = { ownerName = it },
+                    label = { Text(KhataStrings.get("owner_name", language)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().testTag("owner_name_input")
+                )
+
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
+                    label = { Text(KhataStrings.get("phone_number", language)) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().testTag("owner_phone_input")
+                )
+
+                OutlinedTextField(
+                    value = upiId,
+                    onValueChange = { upiId = it },
+                    label = { Text(KhataStrings.get("upi_id_label", language)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().testTag("owner_upi_input")
+                )
+
+                OutlinedTextField(
+                    value = address,
+                    onValueChange = { address = it },
+                    label = { Text(KhataStrings.get("profile_address", language)) },
+                    maxLines = 2,
+                    modifier = Modifier.fillMaxWidth().testTag("owner_address_input")
+                )
+
+                OutlinedTextField(
+                    value = gstNumber,
+                    onValueChange = { gstNumber = it },
+                    label = { Text(KhataStrings.get("gst_number_label", language)) },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().testTag("owner_gst_input")
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    TextButton(onClick = onDismiss) {
+                        Text(KhataStrings.get("btn_cancel", language))
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Button(
+                        onClick = {
+                            val updated = BusinessProfileEntity(
+                                id = 1,
+                                businessName = businessName.trim().ifEmpty { "મહાદેવ પાન પાર્લર & જનરલ સ્ટોર" },
+                                ownerName = ownerName.trim().ifEmpty { "હરેશભાઈ પટેલ" },
+                                phone = phone.trim(),
+                                address = address.trim(),
+                                gstNumber = gstNumber.trim(),
+                                upiId = upiId.trim()
+                            )
+                            onSave(updated)
+                            Toast.makeText(
+                                context,
+                                KhataStrings.get("profile_saved_toast", language),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        },
+                        modifier = Modifier.testTag("save_owner_profile_button")
+                    ) {
+                        Text(KhataStrings.get("btn_save", language))
+                    }
+                }
+            }
+        }
+    }
+}
+

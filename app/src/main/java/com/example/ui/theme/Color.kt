@@ -7,6 +7,21 @@ val KhataGreenPrimary = Color(0xFF0F766E)
 val KhataGreenDark = Color(0xFF064E3B)
 val KhataGreenLight = Color(0xFFD1FAE5)
 
+// Navy Palette
+val KhataNavyPrimary = Color(0xFF1D4ED8)
+val KhataNavyDark = Color(0xFF1E3A8A)
+val KhataNavyLight = Color(0xFFDBEAFE)
+
+// Maroon Palette (Bahi-Khata Red)
+val KhataMaroonPrimary = Color(0xFFB91C1C)
+val KhataMaroonDark = Color(0xFF7F1D1D)
+val KhataMaroonLight = Color(0xFFFEE2E2)
+
+// Purple Palette
+val KhataPurplePrimary = Color(0xFF6D28D9)
+val KhataPurpleDark = Color(0xFF4C1D95)
+val KhataPurpleLight = Color(0xFFEDE9FE)
+
 // Secondary Warm Amber
 val KhataAmber = Color(0xFFD97706)
 val KhataAmberLight = Color(0xFFFEF3C7)

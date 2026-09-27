@@ -28,6 +28,7 @@ import com.example.KhataViewModel
 import com.example.data.BusinessProfileEntity
 import com.example.localization.AppLanguage
 import com.example.localization.KhataStrings
+import com.example.ui.components.BusinessProfileEditDialog
 import com.example.ui.components.KhataConfirmDialog
 import com.example.ui.components.KhataShareHelper
 import com.example.ui.theme.*
@@ -75,7 +76,7 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(
@@ -88,7 +89,7 @@ fun SettingsScreen(
                             Text(
                                 text = KhataStrings.get("app_language", language),
                                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                color = KhataTextPrimary
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
 
@@ -115,17 +116,138 @@ fun SettingsScreen(
                 }
             }
 
-            // Business Profile Card
+            // Theme & Color Customization Card
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(
                         modifier = Modifier.padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.Palette, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = KhataStrings.get("app_theme", language),
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+
+                        // Light / Dark / System Mode
+                        Text(
+                            text = KhataStrings.get("theme_mode", language),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = KhataTextSecondary
+                        )
+
+                        val currentThemeMode = settings?.themeMode ?: "LIGHT"
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            FilterChip(
+                                selected = currentThemeMode == "LIGHT",
+                                onClick = { viewModel.setThemeMode("LIGHT") },
+                                leadingIcon = { Icon(Icons.Default.LightMode, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                                label = { Text(KhataStrings.get("theme_light", language)) },
+                                modifier = Modifier.weight(1f)
+                            )
+                            FilterChip(
+                                selected = currentThemeMode == "DARK",
+                                onClick = { viewModel.setThemeMode("DARK") },
+                                leadingIcon = { Icon(Icons.Default.DarkMode, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                                label = { Text(KhataStrings.get("theme_dark", language)) },
+                                modifier = Modifier.weight(1f)
+                            )
+                            FilterChip(
+                                selected = currentThemeMode == "SYSTEM",
+                                onClick = { viewModel.setThemeMode("SYSTEM") },
+                                leadingIcon = { Icon(Icons.Default.SettingsBrightness, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                                label = { Text(KhataStrings.get("theme_system", language)) },
+                                modifier = Modifier.weight(1f)
+                            )
+                        }
+
+                        // Accent Color Palette
+                        Text(
+                            text = KhataStrings.get("theme_color", language),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = KhataTextSecondary
+                        )
+
+                        val currentThemeColor = settings?.themeColor ?: "EMERALD"
+                        val colorOptions = listOf(
+                            Triple("EMERALD", KhataStrings.get("theme_color_emerald", language), KhataGreenPrimary),
+                            Triple("NAVY", KhataStrings.get("theme_color_navy", language), KhataNavyPrimary),
+                            Triple("MAROON", KhataStrings.get("theme_color_maroon", language), KhataMaroonPrimary),
+                            Triple("PURPLE", KhataStrings.get("theme_color_purple", language), KhataPurplePrimary)
+                        )
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            colorOptions.take(2).forEach { (colorKey, colorLabel, colorVal) ->
+                                val isSelected = currentThemeColor.equals(colorKey, ignoreCase = true)
+                                FilterChip(
+                                    selected = isSelected,
+                                    onClick = { viewModel.setThemeColor(colorKey) },
+                                    leadingIcon = {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(14.dp)
+                                                .clip(CircleShape)
+                                                .background(colorVal)
+                                        )
+                                    },
+                                    label = { Text(colorLabel, maxLines = 1) },
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            colorOptions.drop(2).forEach { (colorKey, colorLabel, colorVal) ->
+                                val isSelected = currentThemeColor.equals(colorKey, ignoreCase = true)
+                                FilterChip(
+                                    selected = isSelected,
+                                    onClick = { viewModel.setThemeColor(colorKey) },
+                                    leadingIcon = {
+                                        Box(
+                                            modifier = Modifier
+                                                .size(14.dp)
+                                                .clip(CircleShape)
+                                                .background(colorVal)
+                                        )
+                                    },
+                                    label = { Text(colorLabel, maxLines = 1) },
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Shop Owner / Business Profile Card
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+                ) {
+                    Column(
+                        modifier = Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -133,36 +255,142 @@ fun SettingsScreen(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(Icons.Default.Storefront, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
-                                Spacer(modifier = Modifier.width(8.dp))
+                                Box(
+                                    modifier = Modifier
+                                        .size(44.dp)
+                                        .clip(CircleShape)
+                                        .background(MaterialTheme.colorScheme.primaryContainer),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        Icons.Default.Storefront,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                        modifier = Modifier.size(24.dp)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Column {
+                                    Text(
+                                        text = KhataStrings.get("owner_profile_title", language),
+                                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                    Text(
+                                        text = "ખાતાવહી અને સ્ટેટમેન્ટ પર પ્રદર્શિત થશે",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = KhataTextSecondary
+                                    )
+                                }
+                            }
+                        }
+
+                        HorizontalDivider(color = KhataCardBorder.copy(alpha = 0.6f))
+
+                        // Details grid
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(
-                                    text = KhataStrings.get("business_profile", language),
-                                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                    color = KhataTextPrimary
+                                    text = "દુકાન: ",
+                                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                    color = KhataTextSecondary
+                                )
+                                Text(
+                                    text = profile?.businessName ?: "મહાદેવ પાન પાર્લર & જનરલ સ્ટોર",
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
+                                    color = MaterialTheme.colorScheme.onSurface
                                 )
                             }
-                            TextButton(onClick = { showProfileDialog = true }) {
-                                Text(KhataStrings.get("btn_edit", language))
+
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(
+                                    text = "માલિક: ",
+                                    style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                    color = KhataTextSecondary
+                                )
+                                Text(
+                                    text = profile?.ownerName ?: "હરેશભાઈ પટેલ",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
+
+                            if (!profile?.phone.isNullOrBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "ફોન / WhatsApp: ",
+                                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                        color = KhataTextSecondary
+                                    )
+                                    Text(
+                                        text = profile?.phone ?: "",
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
+
+                            if (!profile?.upiId.isNullOrBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "તગાદા માટે UPI ID: ",
+                                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                        color = AdvanceBlue
+                                    )
+                                    Text(
+                                        text = profile?.upiId ?: "",
+                                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                                        color = AdvanceBlue
+                                    )
+                                }
+                            }
+
+                            if (!profile?.address.isNullOrBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "સરનામું: ",
+                                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                        color = KhataTextSecondary
+                                    )
+                                    Text(
+                                        text = profile?.address ?: "",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = KhataTextMuted
+                                    )
+                                }
+                            }
+
+                            if (!profile?.gstNumber.isNullOrBlank()) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(
+                                        text = "GSTIN: ",
+                                        style = MaterialTheme.typography.bodySmall.copy(fontWeight = FontWeight.Bold),
+                                        color = KhataTextSecondary
+                                    )
+                                    Text(
+                                        text = profile?.gstNumber ?: "",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = KhataTextMuted
+                                    )
+                                }
                             }
                         }
 
-                        Text(
-                            text = profile?.businessName ?: "દુકાનનું નામ સેટ કરો",
-                            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
-                            color = KhataTextPrimary
-                        )
-
-                        if (!profile?.ownerName.isNullOrBlank()) {
-                            Text(text = "વેપારી: ${profile?.ownerName}", style = MaterialTheme.typography.bodySmall, color = KhataTextSecondary)
-                        }
-                        if (!profile?.phone.isNullOrBlank()) {
-                            Text(text = "મોબાઈલ: ${profile?.phone}", style = MaterialTheme.typography.bodySmall, color = KhataTextSecondary)
-                        }
-                        if (!profile?.upiId.isNullOrBlank()) {
-                            Text(text = "UPI ID: ${profile?.upiId}", style = MaterialTheme.typography.bodySmall, color = AdvanceBlue)
-                        }
-                        if (!profile?.gstNumber.isNullOrBlank()) {
-                            Text(text = "GST: ${profile?.gstNumber}", style = MaterialTheme.typography.bodySmall, color = KhataTextMuted)
+                        Button(
+                            onClick = { showProfileDialog = true },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(46.dp)
+                                .testTag("edit_owner_profile_button"),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        ) {
+                            Icon(Icons.Default.Edit, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = KhataStrings.get("edit_owner_profile", language),
+                                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold)
+                            )
                         }
                     }
                 }
@@ -173,7 +401,7 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(
@@ -192,7 +420,7 @@ fun SettingsScreen(
                                     Text(
                                         text = KhataStrings.get("security_pin", language),
                                         style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                        color = KhataTextPrimary
+                                        color = MaterialTheme.colorScheme.onSurface
                                     )
                                     Text(
                                         text = if (settings?.isPinEnabled == true) "PIN લોક ચાલુ છે" else "PIN લોક બંધ છે",
@@ -223,7 +451,7 @@ fun SettingsScreen(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
                 ) {
                     Column(
@@ -236,7 +464,7 @@ fun SettingsScreen(
                             Text(
                                 text = KhataStrings.get("backup_restore", language),
                                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                                color = KhataTextPrimary
+                                color = MaterialTheme.colorScheme.onSurface
                             )
                         }
 
@@ -300,109 +528,15 @@ fun SettingsScreen(
 
     // Business Profile Edit Dialog
     if (showProfileDialog) {
-        var bName by remember { mutableStateOf(profile?.businessName ?: "") }
-        var oName by remember { mutableStateOf(profile?.ownerName ?: "") }
-        var phone by remember { mutableStateOf(profile?.phone ?: "") }
-        var address by remember { mutableStateOf(profile?.address ?: "") }
-        var gst by remember { mutableStateOf(profile?.gstNumber ?: "") }
-        var upi by remember { mutableStateOf(profile?.upiId ?: "") }
-
-        Dialog(onDismissRequest = { showProfileDialog = false }) {
-            Card(
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(
-                        text = "બિઝનેસ પ્રોફાઇલ સંપાદન",
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                        color = KhataTextPrimary
-                    )
-
-                    OutlinedTextField(
-                        value = bName,
-                        onValueChange = { bName = it },
-                        label = { Text("દુકાન / પેઢીનું નામ") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-
-                    OutlinedTextField(
-                        value = oName,
-                        onValueChange = { oName = it },
-                        label = { Text("માલિકનું નામ") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-
-                    OutlinedTextField(
-                        value = phone,
-                        onValueChange = { phone = it },
-                        label = { Text("મોબાઈલ નંબર") },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-
-                    OutlinedTextField(
-                        value = upi,
-                        onValueChange = { upi = it },
-                        label = { Text("UPI ID (GooglePay / PhonePe)") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-
-                    OutlinedTextField(
-                        value = address,
-                        onValueChange = { address = it },
-                        label = { Text("સરનામું") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-
-                    OutlinedTextField(
-                        value = gst,
-                        onValueChange = { gst = it },
-                        label = { Text("GST નંબર (મરજિયાત)") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        TextButton(onClick = { showProfileDialog = false }) {
-                            Text(KhataStrings.get("btn_cancel", language))
-                        }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Button(
-                            onClick = {
-                                viewModel.updateBusinessProfile(
-                                    BusinessProfileEntity(
-                                        id = 1,
-                                        businessName = bName.trim(),
-                                        ownerName = oName.trim(),
-                                        phone = phone.trim(),
-                                        address = address.trim(),
-                                        gstNumber = gst.trim(),
-                                        upiId = upi.trim()
-                                    )
-                                )
-                                showProfileDialog = false
-                                Toast.makeText(context, "પ્રોફાઇલ સાચવવામાં આવી!", Toast.LENGTH_SHORT).show()
-                            }
-                        ) {
-                            Text(KhataStrings.get("btn_save", language))
-                        }
-                    }
-                }
+        BusinessProfileEditDialog(
+            profile = profile,
+            language = language,
+            onDismiss = { showProfileDialog = false },
+            onSave = { updated ->
+                viewModel.updateBusinessProfile(updated)
+                showProfileDialog = false
             }
-        }
+        )
     }
 
     // Set PIN Dialog
@@ -414,7 +548,7 @@ fun SettingsScreen(
         Dialog(onDismissRequest = { showPinDialog = false }) {
             Card(
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
@@ -483,7 +617,7 @@ fun SettingsScreen(
         Dialog(onDismissRequest = { showRestoreDialog = false }) {
             Card(
                 shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.White),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Column(
